@@ -83,10 +83,13 @@ svg {
     align-items: center;
     background-color: rgba(0, 0, 0, 0.5);
     animation: fadeIn 2s;
+    color: green;
+    font-size: 2.5em;
+
 }
 
-#announcement.hidden {
-    display: none;
+#announcement.hide {
+  display: none;
 }
 
 #announcement-text {
@@ -107,4 +110,19 @@ svg {
     0% { transform: scale(1); }
     50% { transform: scale(1.1); }
     100% { transform: scale(1); }
+}
+
+.winning-line {
+  background-color: #ffdd57;
+  position: relative;
+}
+
+.winning-line::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 100%;
+  height: 2px;
+  background-color: #ff4757;
 }

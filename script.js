@@ -40,11 +40,12 @@ function render() {
             if (isCellEmpty(index)) {
                 updateGameState(index);
                 updateDisplay(cell);
-                switchPlayer();
-
+    
                 const result = checkGameOver();
                 if (result === 'win' || result === 'draw') {
                     announceResult(result);
+                } else {
+                    switchPlayer();
                 }
             }
         });
@@ -109,14 +110,19 @@ cells.forEach((cell, index) => {
         if (isCellEmpty(index)) {
             updateGameState(index);
             updateDisplay(cell);
-            switchPlayer();
 
-            // Check for game over
             const result = checkGameOver();
-            if (result === 'win') {
+            if (result === 'win' || result === 'draw') {
+                gameOver = true;
+                document.getElementById('announcement').classList.remove('hide');
                 document.getElementById('game-history').innerHTML += `<p>${currentPlayer} wins!</p>`;
-            } else if (result === 'draw') {
-                document.getElementById('game-history').innerHTML += '<p>Draw!</p>';
+
+                // If there's a win, highlight the winning line
+                if (result === 'win') {
+                    winningCells.forEach(i => cells[i].classList.add('winning-line'));
+                }
+            } else {
+                switchPlayer();
             }
 
             document.getElementById('circle').classList.remove('active');
@@ -140,20 +146,21 @@ function checkGameOver() {
             fields[line[1]] === currentPlayer &&
             fields[line[2]] === currentPlayer) {
             document.getElementById('game-history').innerHTML += `<p>${currentPlayer} wins!</p>`;
+            document.getElementById('announcement-text').innerHTML = `${currentPlayer} wins!`;
             document.getElementById('announcement').classList.remove('hide');
             gameOver = true;
-            return 'win';
+            return line;  // Return the winning line
         }
     }
 
     // Check for draw
     if (fields.every(cell => cell !== null)) {
         document.getElementById('game-history').innerHTML += '<p>Draw!</p>';
+        document.getElementById('announcement-text').innerHTML = 'Draw!';
         document.getElementById('announcement').classList.remove('hide');
         gameOver = true;
         return 'draw';
     }
-    
 
     // Game is not over
     return false;
@@ -174,7 +181,7 @@ function resetGame() {
     clearGameHistory();
     render();
     document.getElementById('announcement').classList.add('hide');
-
+    document.getElementById('game-history').classList.add('hide');
 }
 
 function handleClick() {
