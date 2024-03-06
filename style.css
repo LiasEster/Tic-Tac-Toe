@@ -1,7 +1,7 @@
 body {
   height: 100vh;
   margin: 0;
-  background-color: #92ffe4;
+  background-color: #907dff;
   font-family: "Arial", sans-serif;
 }
 
@@ -40,7 +40,7 @@ svg {
   width: 120px;
   height: 120px;
   stroke: #333;
-  stroke-width: 2;
+
 }
 #current-player {
   display: flex;
