@@ -35,23 +35,7 @@ function render() {
     
     let cells = document.querySelectorAll('.cell');
 
-    cells.forEach((cell, index) => {
-        cell.addEventListener('click', () => {
-            if (isCellEmpty(index)) {
-                updateGameState(index);
-                updateDisplay(cell);
-    
-                const result = checkGameOver();
-                if (result === 'win' || result === 'draw') {
-                    announceResult(result);
-                } else {
-                    switchPlayer();
-                }
-            }
-        });
-    });
 
-}
 
 function switchPlayer() {
     if (currentPlayer === 'circle') {
@@ -65,19 +49,7 @@ function switchPlayer() {
     }
 }
 
-// Function to announce the result
-function announceResult(result) {
-    const announcement = document.getElementById('announcement');
-    const announcementText = document.getElementById('announcement-text');
 
-    if (result === 'win') {
-        announcementText.textContent = currentPlayer + ' wins!';
-    } else if (result === 'draw') {
-        announcementText.textContent = 'Draw!';
-    }
-
-    announcement.classList.remove('hidden');
-}
 
 // Function to check if a cell is empty
 function isCellEmpty(index) {
@@ -103,8 +75,6 @@ function updateDisplay(cell) {
 }
 
 
-
-// For each cell, attach a click event listener
 cells.forEach((cell, index) => {
     cell.addEventListener('click', () => {
         if (isCellEmpty(index)) {
@@ -112,14 +82,13 @@ cells.forEach((cell, index) => {
             updateDisplay(cell);
 
             const result = checkGameOver();
-            if (result === 'win' || result === 'draw') {
+            if (result !== false) {
                 gameOver = true;
                 document.getElementById('announcement').classList.remove('hide');
-                document.getElementById('game-history').innerHTML += `<p>${currentPlayer} wins!</p>`;
 
                 // If there's a win, highlight the winning line
-                if (result === 'win') {
-                    winningCells.forEach(i => cells[i].classList.add('winning-line'));
+                if (result !== 'draw') {
+                    result.indices.forEach(i => cells[i].classList.add(`winning-line-${result.type}`));
                 }
             } else {
                 switchPlayer();
@@ -136,15 +105,20 @@ let gameOver = false;
 function checkGameOver() {
     // Winning combinations
     const lines = [
-        [0, 1, 2], [3, 4, 5], [6, 7, 8],  // Rows
-        [0, 3, 6], [1, 4, 7], [2, 5, 8],  // Columns
-        [0, 4, 8], [2, 4, 6]              // Diagonals
+        { type: 'horizontal', indices: [0, 1, 2] },
+        { type: 'horizontal', indices: [3, 4, 5] },
+        { type: 'horizontal', indices: [6, 7, 8] },
+        { type: 'vertical', indices: [0, 3, 6] },
+        { type: 'vertical', indices: [1, 4, 7] },
+        { type: 'vertical', indices: [2, 5, 8] },
+        { type: 'diagonal-right', indices: [0, 4, 8] },
+        { type: 'diagonal-left', indices: [2, 4, 6] }
     ];
 
     for (let line of lines) {
-        if (fields[line[0]] === currentPlayer &&
-            fields[line[1]] === currentPlayer &&
-            fields[line[2]] === currentPlayer) {
+        if (fields[line.indices[0]] === currentPlayer &&
+            fields[line.indices[1]] === currentPlayer &&
+            fields[line.indices[2]] === currentPlayer) {
             document.getElementById('game-history').innerHTML += `<p>${currentPlayer} wins!</p>`;
             document.getElementById('announcement-text').innerHTML = `${currentPlayer} wins!`;
             document.getElementById('announcement').classList.remove('hide');
@@ -184,19 +158,12 @@ function resetGame() {
     document.getElementById('game-history').classList.add('hide');
 }
 
-function handleClick() {
-    if (gameOver) {
-        resetGame();
-        gameOver = false;
-    } else {
-        const result = checkGameOver();
-        if (result === 'win' || result === 'draw') {
-            gameOver = true;
-        }
-    }
-}
+
+
 document.getElementById('announcement').addEventListener('click', () => {
     if (gameOver) {
         resetGame();
     }
 });
+}
+render();

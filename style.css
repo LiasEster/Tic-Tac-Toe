@@ -112,17 +112,32 @@ svg {
     100% { transform: scale(1); }
 }
 
-.winning-line {
-  background-color: #ffdd57;
-  position: relative;
+.winning-line-horizontal::after,
+.winning-line-vertical::after,
+.winning-line-diagonal-right::after,
+.winning-line-diagonal-left::after {
+    content: "";
+    position: absolute;
+    background-color: #ff4757;
+    height: 2px;
 }
 
-.winning-line::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 50%;
-  width: 100%;
-  height: 2px;
-  background-color: #ff4757;
+.winning-line-vertical {
+  /* Styles for a horizontal winning line */
+  background: linear-gradient(to left, transparent 0%, transparent 45%, red 45%, red 55%, transparent 55%, transparent 100%);
+}
+
+.winning-line-horizontal {
+  /* Styles for a vertical winning line */
+  background: linear-gradient(to top, transparent 0%, transparent 45%, red 45%, red 55%, transparent 55%, transparent 100%);
+}
+
+.winning-line-diagonal-right {
+  /* Styles for a diagonal winning line from top-right to bottom-left */
+  background: linear-gradient(to bottom left, transparent 0%, transparent 45%, red 45%, red 55%, transparent 55%, transparent 100%);
+}
+
+.winning-line-diagonal-left {
+  /* Styles for a diagonal winning line from top-left to bottom-right */
+  background: linear-gradient(to bottom right, transparent 0%, transparent 45%, red 45%, red 55%, transparent 55%, transparent 100%);
 }
