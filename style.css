@@ -141,3 +141,6 @@ svg {
   /* Styles for a diagonal winning line from top-left to bottom-right */
   background: linear-gradient(to bottom right, transparent 0%, transparent 45%, red 45%, red 55%, transparent 55%, transparent 100%);
 }
+h1 {
+  text-align: center;
+}
